@@ -7,6 +7,7 @@ ENV INSTALLDIR /opt/interlegis/SAPL25
 ENV LANG pt_BR.UTF-8
 ENV LANGUAGE pt_BR:pt
 ENV LC_ALL pt_BR.UTF-8
+ENV ADMINPW admin
 
 RUN apt-get update && apt-get upgrade && \
     apt-get install -y \

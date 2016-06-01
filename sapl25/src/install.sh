@@ -767,17 +767,20 @@ fi
 # Postinstall steps
 ######################
 
+# COMENTADO PARA INSTALAÇÃO NO DOCKER
 ##########################
 # Generate random password
-echo -e "\033[32mGenerando senha randomica ...\033[m"
-cd $PKG
-$GNU_TAR -jxf $HSCRIPTS_TB
-chmod -R 775 $HSCRIPTS_DIR
-cd $HSCRIPTS_DIR
-PASSWORD_SCRIPT=./generateRandomPassword.py
-PASSWORD=`$PY $PASSWORD_SCRIPT`
-cd $PKG
+#echo -e "\033[32mGenerando senha randomica ...\033[m"
+#cd $PKG
+#$GNU_TAR -jxf $HSCRIPTS_TB
+#chmod -R 775 $HSCRIPTS_DIR
+#cd $HSCRIPTS_DIR
+#PASSWORD_SCRIPT=./generateRandomPassword.py
+#PASSWORD=`$PY $PASSWORD_SCRIPT`
+#cd $PKG
 
+# VARIÁVEL DE AMBIENTE DO DOCKER 
+PASSWORD=$ADMINPW
 
 ####################
 # Create SAPL instance
@@ -891,25 +894,25 @@ echo "A conta tem privilégios de 'Manager'." >> "$PWFILE"
 echo " " >> "$PWFILE"
 echo "  Username: admin" >> "$PWFILE"
 echo "  Senha: $PASSWORD" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "Antes de iniciar o SAPL, você deverá rever as configurações em:" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "  $SAPL_HOME/etc/zope.conf" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "Ajuste as portas do SAPL antes de inicar seu uso, caso necessário" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "Para iniciar o SAPL, execute o seguinte comando no terminal:" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "  sudo $SAPL_STARTUP_SCRIPT" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "Para parar o SAPL, execute o seguinte comando no terminal:" >> "$PWFILE"
-echo " " >> "$PWFILE"
-echo "  sudo $SAPL_SHUTDOWN_SCRIPT" >> "$PWFILE"
-echo " " >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "Antes de iniciar o SAPL, você deverá rever as configurações em:" >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "  $SAPL_HOME/etc/zope.conf" >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "Ajuste as portas do SAPL antes de inicar seu uso, caso necessário" >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "Para iniciar o SAPL, execute o seguinte comando no terminal:" >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "  sudo $SAPL_STARTUP_SCRIPT" >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "Para parar o SAPL, execute o seguinte comando no terminal:" >> "$PWFILE"
+#echo " " >> "$PWFILE"
+#echo "  sudo $SAPL_SHUTDOWN_SCRIPT" >> "$PWFILE"
+#echo " " >> "$PWFILE"
 
 ####################################################
 # Write SAPL startup/shutdown/restart scripts to file
-# ---- DESABILITADO PARA INSTALACAO AUTOMATICA VIA PUPPET ---
+# ---- DESABILITADO PARA CRIAÇÃO DA IMAGEM DOCKER ---
 # Write startup script
 #echo -e "\033[32mEscrevendo o arquivo de script startup ...\033[m"
 #touch $SAPL_STARTUP_SCRIPT
@@ -964,16 +967,17 @@ find $INSTALL_HOME -name '.DS_Store' -delete
 
 ################################################
 # Add user account via platform-specific methods
-echo -e "\033[32mAdicionando usuario 'zope' ao sistema ...\033[m"
+# COMENTADO PARA CRIAR A IMAGEM DOCKER
+#echo -e "\033[32mAdicionando usuario 'zope' ao sistema ...\033[m"
 # Add unprivileged user account via 'useradd', if exists (Linux)
-if [ -e /usr/sbin/useradd ]
-then
-    /usr/sbin/useradd $EFFECTIVE_USER
+#if [ -e /usr/sbin/useradd ]
+#then
+#    /usr/sbin/useradd $EFFECTIVE_USER
 # Add unprivileged user account via 'adduser', if exists (*BSD)
-elif [ -e /usr/sbin/adduser ]
-then
-    /usr/sbin/adduser -f $PKG/$HSCRIPTS_DIR/adduser.txt
-fi
+#elif [ -e /usr/sbin/adduser ]
+#then
+#    /usr/sbin/adduser -f $PKG/$HSCRIPTS_DIR/adduser.txt
+#fi
 
 # Add zope user to NetInfo if we're on Mac OS X
 # try dscl for Mac OS X
@@ -1146,7 +1150,7 @@ if [ -d $INSTALL_HOME ]
     cat $INSTALL_HOME/adminPassword.txt
     echo " "
     echo "SAPL foi instalado com sucesso em $INSTALL_HOME"
-    echo "Leia o arquivo $INSTALL_HOME/adminPassword.txt para ver a senha e instruções para inicialização"
+#    echo "Leia o arquivo $INSTALL_HOME/adminPassword.txt para ver a senha e instruções para inicialização"
     echo " "
     echo "Submissão de feedback e report de erros em http://colab.interlegis.gov.br/newticket"
     echo " "
