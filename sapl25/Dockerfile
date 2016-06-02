@@ -1,13 +1,24 @@
 FROM ubuntu:12.04
 MAINTAINER "Fabio Rauber" <fabiorauber@gmail.com>
 
-ENV SVNSOURCE http://repositorio.interlegis.gov.br/ILSAPL/install/2.5/
-ENV INSTALLSRC /usr/local/src/sapl25
-ENV INSTALLDIR /opt/interlegis/SAPL25
-ENV LANG pt_BR.UTF-8
-ENV LANGUAGE pt_BR:pt
-ENV LC_ALL pt_BR.UTF-8
-ENV ADMINPW admin
+ENV SVNSOURCE="http://repositorio.interlegis.gov.br/ILSAPL/install/2.5/" \
+    INSTALLSRC="/usr/local/src/sapl25" \
+    INSTALLDIR="/opt/interlegis/SAPL25" \
+    LANG="pt_BR.UTF-8" \
+    LANGUAGE="pt_BR:pt" \
+    LC_ALL="pt_BR.UTF-8" \
+    ADMINPW="admin" \
+    MYSQL_PASSWORD="mysqlInterlegis" \
+    MYSQL_HOST="mysql" \
+    MYSQL_DATABASE="sapl" \
+    MYSQL_USER="sapl" \
+    ZEO_CLIENT=false \
+    ZEO_ADDRESS="zeoserver:8100" \
+    SAPL_EMAIL="sapl@localhost" \
+    SAPL_SMTP_HOST="localhost" \
+    SAPL_SMTP_PORT="25" \
+    SAPL_PASSWORD="altereme" \
+    SAPL_NAME="Municipio - UF"
 
 RUN apt-get update && apt-get upgrade && \
     apt-get install -y \
@@ -54,7 +65,10 @@ RUN cd install_sapl && \
     /bin/bash install.sh && \
     rm -rf $INSTALLSRC/install_sapl && \
     touch $INSTALLDIR/instances/sapl25/log/event.log && \
-    chown -R zope:zope $INSTALLDIR/instances/sapl25
+    chown -R zope:zope $INSTALLDIR/instances/sapl25 && \
+    cp $INSTALLDIR/instances/sapl25/Products/ILSAPL/import/* $INSTALLDIR/instances/sapl25/import/
+
+COPY src/sapl_create.py $INSTALLDIR/sapl_create.py
 
 VOLUME $INSTALLDIR/instances/sapl25/var
 

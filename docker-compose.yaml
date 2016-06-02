@@ -1,0 +1,23 @@
+sapl:
+  #image: interlegis/sapl:2.5
+  build: sapl25
+  ports:
+    - "8080:8080"
+  environment:
+    - MYSQL_PASSWORD=saplInterlegis
+    - ZEO_CLIENT=True
+    - ZEO_ADDRESS=zeoserver:8100
+  links:
+    - mysql
+    - zeoserver
+
+zeoserver:
+  image: interlegis/zeoserver:2.9.12
+
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=mysqlInterlegis
+    - MYSQL_DATABASE=sapl
+    - MYSQL_USER=sapl
+    - MYSQL_PASSWORD=saplInterlegis
