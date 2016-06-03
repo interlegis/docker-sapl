@@ -1,11 +1,12 @@
 FROM ubuntu:12.04
 MAINTAINER "Fabio Rauber" <fabiorauber@gmail.com>
 
-ENV LANG pt_BR.UTF-8
-ENV LANGUAGE pt_BR:pt
-ENV LC_ALL pt_BR.UTF-8
-ENV INSTALLDIR /opt/zope
-ENV ZEOPORT 8100
+ENV LANG="pt_BR.UTF-8" \
+    LANGUAGE="pt_BR:pt" \
+    LC_ALL="pt_BR.UTF-8" \
+    INSTALLDIR="/opt/zope" \ 
+    ZEOPORT="8100" \
+    TEMPSTORAGE="True" 
 
 RUN apt-get update && apt-get upgrade && \
     apt-get install -y \
