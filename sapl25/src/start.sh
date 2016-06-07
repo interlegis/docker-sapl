@@ -9,10 +9,10 @@ trap _terminate SIGTERM SIGINT
 
 mysqlcheck() {
   # Wait for MySQL to be available...
-  COUNTER=10
+  COUNTER=20
   until mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "show databases" 2>/dev/null; do
     echo "WARNING: MySQL still not up. Trying again..."
-    sleep 1
+    sleep 5
     let COUNTER-=1
     if [ $COUNTER -lt 1 ]; then
       echo "ERROR: MySQL connection timed out. Aborting."
@@ -24,7 +24,7 @@ mysqlcheck() {
   if [ "$count" == "0" ]; then
     until mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "show databases"; do
       echo "MySQL is unavailable - sleeping"
-      sleep 2
+      sleep 10
     done
     echo "Database is empty. Importing base tables..."
     mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < $INSTALLDIR/instances/sapl25/Products/ILSAPL/instalacao/sapl.sql && echo "Import done."
