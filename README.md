@@ -25,7 +25,7 @@ Save the following snippet as docker-compose.yaml in any folder you like, or clo
 
 ```
 sapl:
-  image: interlegis/sapl:2.5
+  image: interlegis/sapl25:latest
   ports:
     - "8080:8080"
   environment:
@@ -38,6 +38,8 @@ sapl:
 
 zeoserver:
   image: interlegis/zeoserver:2.9.12
+  volumes:
+    - zeodata:/opt/zope/instances/zeo/var
 
 mysql:
   image: mysql
@@ -46,6 +48,8 @@ mysql:
     - MYSQL_DATABASE=sapl
     - MYSQL_USER=sapl
     - MYSQL_PASSWORD=saplInterlegis
+  volumes:
+    - mysqldata:/var/lib/mysql
 ```
 
 ## Running
