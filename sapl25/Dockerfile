@@ -20,7 +20,7 @@ ENV SVNSOURCE="http://repositorio.interlegis.gov.br/ILSAPL/install/2.5/" \
     SAPL_PASSWORD="altereme" \
     SAPL_NAME="Municipio - UF"
 
-RUN apt-get update && apt-get upgrade && \
+RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y \
         language-pack-pt-base \
         build-essential \
