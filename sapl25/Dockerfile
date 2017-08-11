@@ -18,7 +18,8 @@ ENV SVNSOURCE="http://repositorio.interlegis.gov.br/ILSAPL/install/2.5/" \
     SAPL_SMTP_HOST="localhost" \
     SAPL_SMTP_PORT="25" \
     SAPL_PASSWORD="altereme" \
-    SAPL_NAME="Municipio - UF"
+    SAPL_NAME="Municipio - UF" \
+    SAPL_HOSTNAME="localhost"
 
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y \
@@ -52,8 +53,8 @@ RUN apt-get update && apt-get -y upgrade && \
 COPY src/start.sh /usr/bin/start
 
 RUN mkdir -p $INSTALLSRC && \
-    groupadd -g 500 zope && \
-    useradd -g 500 -u 500 -m -s /bin/bash zope && \
+    groupadd -g 501 zope && \
+    useradd -g 501 -u 501 -m -s /bin/bash zope && \
     chmod +x /usr/bin/start && \
     locale-gen pt_BR.UTF-8
 
