@@ -47,6 +47,7 @@ dbpass = os.getenv('MYSQL_PASSWORD');
 nome = os.getenv('SAPL_NAME');
 adminpw = os.getenv('ADMINPW');
 hostname = os.getenv('SAPL_HOSTNAME');
+protocol = os.getenv('SAPL_PROTOCOL');
 
 nome = nome.decode('utf8').encode('iso-8859-1')
 title = "Câmara Municipal de %s" %(nome)
@@ -74,7 +75,7 @@ try:
   sapl.manage_delObjects('Members')
   connection_string = "%s@%s %s %s" %(dbname, dbhost, dbuser, dbpass) 
   sapl.dbcon_interlegis.manage_edit(title='Banco de Dados do SAPL (MySQL)', connection_string=connection_string, check=None)
-  app.virtual_hosting.set_map(hostname + '/VirtualHostBase/https/' + hostname + '/sapl/VirtualHostRoot\n' + hostname + '/VirtualHostBase/http/' + hostname + '/sapl/VirtualHostRoot')
+  app.virtual_hosting.set_map(hostname + '/VirtualHostBase/' + protocol + '/' + hostname + '/sapl/VirtualHostRoot')
 
   ### Gravar alteracoes
   t.commit()

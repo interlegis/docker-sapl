@@ -19,7 +19,8 @@ ENV SVNSOURCE="http://repositorio.interlegis.gov.br/ILSAPL/install/2.5/" \
     SAPL_SMTP_PORT="25" \
     SAPL_PASSWORD="altereme" \
     SAPL_NAME="Municipio - UF" \
-    SAPL_HOSTNAME="localhost"
+    SAPL_HOSTNAME="localhost" \
+    SAPL_PROTOCOL="http"
 
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y \
