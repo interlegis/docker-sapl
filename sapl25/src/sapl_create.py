@@ -28,7 +28,7 @@ while i < len(l_users):
         break
     i=i+1
 if not t_username:
-    print "*** ERRO! Na foi encontrado um usuário administrador do Zope.Contacte o Interlegis. ***"
+    print "*** ERRO! Na foi encontrado um usuario administrador do Zope.Contacte o Interlegis. ***"
 ######## 1.2 - Registrar esse usuario nesta sessao
 from AccessControl.SecurityManagement import newSecurityManager
 adminuser=app.acl_users.getUser(t_username).__of__(app.acl_users)
@@ -55,37 +55,33 @@ mp_path = '/'
 
 ### Troca senha de Admin ###
 try:
-  app.acl_users.users.updateUserPassword('admin', adminpw)
-except Exception as e:
-  logger.error('An error ocurred while changing admin password: %s.' % str(e))
+  app.acl_users.userFolderEditUser('admin', adminpw, ['Manager','Owner'], [])
+except:
+  print "An error ocurred while changing admin password."
+  raise
 
 
 ### Adicionar o SAPL ###
 try:
-	app.manage_addProduct['ILSAPL'].manage_addSAPL(id='sapl', title='SAPL - Sistema de Apoio ao Processo Legislativo', database='MySQL')
-	sapl = app['sapl']
-	sapl.manage_changeProperties(title=title, description=description)
-	sapl.sapl_documentos.props_sapl.manage_changeProperties(nom_casa=title, end_email_casa=email)
-	sapl.MailHost.manage_makeChanges(title='SMTP Host', smtp_host=smtp_host, smtp_port=smtp_port)
-	sapl.acl_users.userFolderAddUser('manager', senha, ['Manager','Owner'],[])
-	sapl.acl_users.userFolderEditUser(name='saploper', password=senha, roles=['Operador'], domains='')
-	sapl.acl_users.userFolderEditUser(name='sapladm', password=senha, roles=['Administrador'], domains='')
-	sapl.manage_delObjects('Members')
-	connection_string = "%s@%s %s %s" %(dbname, dbhost, dbuser, dbpass) 
-	sapl.dbcon_interlegis.manage_edit(title='Banco de Dados do SAPL (MySQL)', connection_string=connection_string, check=None)
-
-
-	### Gravar alteracoes
-	t.commit()
-except:
-	print "Erro não esperado ao criar sapl de %s, email %s, senha %s." %(title,email,senha)
-	raise
-
-
-### Configura SAPL Virtual Hosting ###
-try:
+  app.manage_addProduct['ILSAPL'].manage_addSAPL(id='sapl', title='SAPL - Sistema de Apoio ao Processo Legislativo', database='MySQL')
+  sapl = app['sapl']
+  sapl.manage_changeProperties(title=title, description=description)
+  sapl.sapl_documentos.props_sapl.manage_changeProperties(nom_casa=title, end_email_casa=email)
+  sapl.MailHost.manage_makeChanges(title='SMTP Host', smtp_host=smtp_host, smtp_port=smtp_port)
+  sapl.acl_users.userFolderAddUser('manager', senha, ['Manager','Owner'],[])
+  sapl.acl_users.userFolderEditUser(name='saploper', password=senha, roles=['Operador'], domains='')
+  sapl.acl_users.userFolderEditUser(name='sapladm', password=senha, roles=['Administrador'], domains='')
+  sapl.manage_delObjects('Members')
+  connection_string = "%s@%s %s %s" %(dbname, dbhost, dbuser, dbpass) 
+  sapl.dbcon_interlegis.manage_edit(title='Banco de Dados do SAPL (MySQL)', connection_string=connection_string, check=None)
   app.virtual_hosting.set_map(hostname + '/VirtualHostBase/https/' + hostname + '/sapl/VirtualHostRoot\n' + hostname + '/VirtualHostBase/http/' + hostname + '/sapl/VirtualHostRoot')
 
-except Exception as e:
-  logger.error('An error ocurred while configuring virtual_hosting: %s.' % str(e))
- 
+  ### Gravar alteracoes
+  t.commit()
+
+except ConfigurationError:
+  pass
+
+except:
+  print "Erro não esperado ao criar sapl de %s, email %s, senha %s." %(title,email,senha)
+  raise
