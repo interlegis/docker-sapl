@@ -1,17 +1,20 @@
 sapl:
-  image: interlegis/sapl25:latest
+  #image: interlegis/sapl25:latest
+  build: sapl25
   ports:
     - "8080:8080"
   environment:
     - MYSQL_PASSWORD=saplInterlegis
     - ZEO_CLIENT=True
     - ZEO_ADDRESS=zeoserver:8100
+    - ADMINPW=a different password
+    - SAPL_HOSTNAME=sapl.teste.df.leg.br
   links:
     - mysql
     - zeoserver
 
 zeoserver:
-  image: interlegis/zeoserver:2.9.12
+  image: interlegis/zeoserver:2.9.12-2
   volumes:
     - zeodata:/opt/zope/instances/zeo/var
 
