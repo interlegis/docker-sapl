@@ -34,7 +34,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 adminuser=app.acl_users.getUser(t_username).__of__(app.acl_users)
 newSecurityManager (None, adminuser)
 
-### Adicionar o SAPL ###
+### Pega variaveis de ambiente ###
 import os;
 email = os.getenv('SAPL_EMAIL');
 smtp_host = os.getenv('SAPL_SMTP_HOST');
@@ -44,13 +44,23 @@ dbhost = os.getenv('MYSQL_HOST');
 dbname = os.getenv('MYSQL_DATABASE');
 dbuser = os.getenv('MYSQL_USER');
 dbpass = os.getenv('MYSQL_PASSWORD');
-nome = os.getenv('SAPL_NAME'); 
+nome = os.getenv('SAPL_NAME');
+adminpw = os.getenv('ADMINPW');
+hostname = os.getenv('SAPL_HOSTNAME');
 
 nome = nome.decode('utf8').encode('iso-8859-1')
 title = "Câmara Municipal de %s" %(nome)
 description = "Câmara Municipal de %s: Informações sobre a câmara, o município, parlamentares, leis e processo legislativo com transparência" %(nome)
 mp_path = '/'
 
+### Troca senha de Admin ###
+try:
+  app.acl_users.users.updateUserPassword('admin', adminpw)
+except Exception as e:
+  logger.error('An error ocurred while changing admin password: %s.' % str(e))
+
+
+### Adicionar o SAPL ###
 try:
 	app.manage_addProduct['ILSAPL'].manage_addSAPL(id='sapl', title='SAPL - Sistema de Apoio ao Processo Legislativo', database='MySQL')
 	sapl = app['sapl']
@@ -69,4 +79,13 @@ try:
 	t.commit()
 except:
 	print "Erro não esperado ao criar sapl de %s, email %s, senha %s." %(title,email,senha)
-	raise 
+	raise
+
+
+### Configura SAPL Virtual Hosting ###
+try:
+  app.virtual_hosting.set_map(hostname + '/VirtualHostBase/https/' + hostname + '/sapl/VirtualHostRoot\n' + hostname + '/VirtualHostBase/http/' + hostname + '/sapl/VirtualHostRoot')
+
+except Exception as e:
+  logger.error('An error ocurred while configuring virtual_hosting: %s.' % str(e))
+ 
