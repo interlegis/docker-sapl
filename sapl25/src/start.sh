@@ -28,14 +28,9 @@ mysqlcheck() {
     done
     echo "Database is empty. Importing base tables..."
     mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < $INSTALLDIR/instances/sapl25/Products/ILSAPL/instalacao/sapl.sql && echo "Import done."
-  fi 
-}
-
-zopesaplcheck() {
-  if [ ! -f "$INSTALLDIR/.saplcreated" ]; then
-    echo "Configuring SAPL..."
+    sleep 2
+    echo "Creating SAPL..."
     $INSTALLDIR/instances/sapl25/bin/zopectl run $INSTALLDIR/sapl_create.py 2>/dev/null && \
-    touch "$INSTALLDIR/.saplcreated" && \
     echo "SAPL configured successfully."
   fi 
 }
@@ -88,7 +83,6 @@ zeoclientcheck() {
 
 zeoclientcheck
 mysqlcheck
-zopesaplcheck
 
 $INSTALLDIR/instances/sapl25/bin/zopectl start
 $INSTALLDIR/instances/sapl25/bin/zopectl logtail &
