@@ -527,6 +527,7 @@ fi
     --prefix=$PY_HOME \
     --with-readline \
     --with-zlib \
+    --with-ssl \
     --disable-tk \
     --with-gcc="$GCC"
 make
