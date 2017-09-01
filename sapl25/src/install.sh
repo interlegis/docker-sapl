@@ -354,10 +354,10 @@ fi
 
 
 #################################
-# Install will begin in 3 seconds
+# Install will begin
 echo ""
 echo -e "\033[32mInstalando SAPL 2.5 em $INSTALL_HOME\033[m"
-sleep 3
+#sleep 3
 echo ""
 
 
@@ -512,17 +512,12 @@ cd $PKG
 $GNU_TAR -jxf $PYTHON_TB
 chmod -R 775 $PYTHON_DIR
 cd $PYTHON_DIR
-# Look for Leopard
-uname -v | grep "Darwin Kernel Version 9" > /dev/null
-if [ "$?" = "0" ]; then
-    # patch for Leopard setpgrp
-    sed -E -e "s|(CPPFLAGS=.+)|\\1 -D__DARWIN_UNIX03|" -i.bak Makefile.pre.in
-    # if /opt/local is available, make sure it's included in the component
-    # build so that we can get fixed readline lib
-    if [ -d /opt/local/include ] && [ -d /opt/local/lib ]; then
-        sed -E -e "s|#(add_dir_to_list\(self\.compiler\..+_dirs, '/opt/local/)|\\1|" -i.bak setup.py
-    fi
-fi
+
+# Fix issue with Python 2.4, Ubuntu Precise and SSL
+# https://github.com/collective/buildout.python/issues/8
+# https://ubuntuforums.org/showthread.php?t=1976837
+patch setup.py < $INSTALLSRC/setup_py.patch
+
 ./configure \
     --prefix=$PY_HOME \
     --with-readline \

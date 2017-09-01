@@ -1,0 +1,20 @@
+--- setup.py    2006-10-08 19:41:25.000000000 +0200
++++ setup.py        2012-05-08 14:02:14.325174357 +0200
+@@ -269,6 +269,7 @@
+         lib_dirs = self.compiler.library_dirs + [
+             '/lib64', '/usr/lib64',
+             '/lib', '/usr/lib',
++           '/usr/lib/x86_64-linux-gnu'
+             ]
+         inc_dirs = self.compiler.include_dirs + ['/usr/include']
+         exts = []
+@@ -496,7 +497,8 @@
+                 ssl_incs += krb5_h
+         ssl_libs = find_library_file(self.compiler, 'ssl',lib_dirs,
+                                      ['/usr/local/ssl/lib',
+-                                      '/usr/contrib/ssl/lib/'
++                                      '/usr/contrib/ssl/lib/',
++                                     'x86_64-linux-gnu'
+                                      ] )
+ 
+         if (ssl_incs is not None and

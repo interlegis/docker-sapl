@@ -29,6 +29,7 @@ RUN apt-get update && apt-get -y upgrade && \
         zlib1g-dev \
         libjpeg62-dev \
         libssl-dev \
+        openssl \
         libreadline6-dev \
         libreadline6 \
         readline-common \
@@ -63,6 +64,8 @@ WORKDIR $INSTALLSRC
 
 RUN /usr/bin/svn co $SVNSOURCE install_sapl
 COPY src/install.sh $INSTALLSRC/install_sapl
+COPY src/setup_py.patch $INSTALLSRC
+
 RUN cd install_sapl && \ 
     /bin/bash install.sh && \
     rm -rf $INSTALLSRC/install_sapl && \
@@ -74,6 +77,7 @@ COPY src/sapl_create.py $INSTALLDIR/sapl_create.py
 
 VOLUME $INSTALLDIR/instances/sapl25/var
 
+WORKDIR $INSTALLDIR
 USER zope 
    
 EXPOSE 8080
