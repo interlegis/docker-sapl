@@ -84,6 +84,9 @@ zeoclientcheck() {
 zeoclientcheck
 mysqlcheck
 
+# Remove inituser file to prevent Admin password from being reset
+rm -f $INSTALLDIR/instances/sapl25/inituser
+
 $INSTALLDIR/instances/sapl25/bin/zopectl start
 $INSTALLDIR/instances/sapl25/bin/zopectl logtail &
 
