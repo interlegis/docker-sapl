@@ -75,7 +75,9 @@ RUN cd install_sapl && \
 
 COPY src/sapl_create.py $INSTALLDIR/sapl_create.py
 
-VOLUME $INSTALLDIR/instances/sapl25/var
+ADD src/FSDump.tar.gz $INSTALLDIR/instances/sapl25/Products
+
+RUN chown -R zope:zope $INSTALLDIR/instances/sapl25/Products/FSDump
 
 WORKDIR $INSTALLDIR
 USER zope 
